@@ -33,7 +33,7 @@ if pilihan == "Deteksi AI":
             with st.spinner("Sedang memproses..."):
                 try:
                     # MENGGUNAKAN NAMA MODEL PALING STABIL UNTUK MENGHINDARI ERROR 404
-                    model = genai.GenerativeModel('gemini-1.5-flash')
+                   model = genai.GenerativeModel('models/gemini-1.5-flash')
                     
                     prompt = f"Anda adalah pakar kesehatan {hewan}. Analisis foto ini dan berikan saran perawatan atau pengobatan jika hewan/tanaman terlihat sakit."
                     
