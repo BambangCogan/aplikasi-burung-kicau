@@ -1,32 +1,39 @@
 import streamlit as st
+import google.generativeai as genai
+from PIL import Image
 
-# Tampilan Judul
+# --- KONFIGURASI AI ---
+# MASUKKAN API KEY ANDA DI SINI
+API_KEY = "AIzaSyCQ9Uh1hJGW5X_-WPo6Zcrx-jsq5IvKQug" 
+genai.configure(api_key=API_KEY)
+model = genai.GenerativeModel('gemini-1.5-flash')
+
 st.set_page_config(page_title="PetCare AI - Mr. Bambang", page_icon="🐦")
 st.title("🐾 PetCare AI: Deteksi & Perawatan")
-st.subheader("Solusi Pakar untuk Burung Kicau & Kucing")
 
-# Menu Navigasi
-pilihan = st.sidebar.selectbox("Pilih Kategori", ["Beranda", "Deteksi Kesehatan", "Jadwal Perawatan"])
+pilihan = st.sidebar.selectbox("Pilih Menu", ["Deteksi AI", "Jadwal Perawatan"])
 
-if pilihan == "Beranda":
-    st.write("Selamat datang di aplikasi perawatan hewan Mr. Bambang.")
-    st.info("Gunakan menu di samping untuk mulai mendeteksi kesehatan hewan Anda.")
-
-elif pilihan == "Deteksi Kesehatan":
-    st.write("### Unggah Foto atau Rekaman Suara")
-    hewan = st.radio("Jenis Hewan:", ["Burung Kicau", "Kucing"])
-    file_upload = st.file_uploader("Pilih file (Gambar/Audio)", type=["jpg", "png", "mp3", "wav"])
+if pilihan == "Deteksi AI":
+    st.write("### 📸 Deteksi Kesehatan via Foto")
+    hewan = st.radio("Target Analisis:", ["Burung Kicau", "Kucing", "Tanaman Hias"])
+    
+    file_upload = st.file_uploader("Unggah Foto", type=["jpg", "jpeg", "png"])
     
     if file_upload is not None:
-        st.success("File berhasil diunggah! AI sedang menganalisis...")
-        # Simulasi Logika AI
-        if hewan == "Burung Kicau":
-            st.warning("Hasil: Burung terdeteksi kurang jemur dan nutrisi. Disarankan beri jangkrik ekstra.")
-        else:
-            st.warning("Hasil: Ada gejala jamur ringan pada telinga. Gunakan salep antijamur.")
+        image = Image.open(file_upload)
+        st.image(image, caption="Foto yang diunggah", use_container_width=True)
+        
+        if st.button("Mulai Analisis AI"):
+            with st.spinner("Sedang berpikir..."):
+                # Instruksi khusus untuk AI
+                prompt = f"Anda adalah pakar kesehatan {hewan}. Analisis foto ini dan berikan saran kesehatan atau identifikasi jenisnya secara singkat dan mudah dipahami dalam bahasa Indonesia."
+                response = model.generate_content([prompt, image])
+                st.success("Analisis Selesai!")
+                st.write(response.text)
 
 elif pilihan == "Jadwal Perawatan":
-    st.write("### Kalender Perawatan")
-    st.checkbox("Pemberian Vitamin (Pagi)")
-    st.checkbox("Pembersihan Kandang")
-    st.checkbox("Latihan Kicau (Sore)")
+    st.write("### 📅 Catatan Harian")
+    st.text_input("Nama Hewan/Tanaman:")
+    st.date_input("Tanggal Perawatan:")
+    st.checkbox("Pemberian Vitamin/Pupuk")
+    st.button("Simpan Jadwal")
