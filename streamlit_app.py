@@ -7,7 +7,7 @@ from PIL import Image
 # Ganti baris 7-8 yang lama dengan ini:
 API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 st.set_page_config(page_title="PetCare AI - Mr. Bambang", page_icon="🐦")
 st.title("🐾 PetCare AI: Deteksi & Perawatan")
