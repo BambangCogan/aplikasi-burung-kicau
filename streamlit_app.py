@@ -4,7 +4,8 @@ from PIL import Image
 
 # --- KONFIGURASI AI ---
 # MASUKKAN API KEY ANDA DI SINI
-API_KEY = "AIzaSyCQ9Uh1hJGW5X_-WPo6Zcrx-jsq5IvKQug" 
+# Ganti baris 7-8 yang lama dengan ini:
+API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
